@@ -33,12 +33,13 @@ def chat(request):
 def chat_json(request, chat_id):
     '''
     !!! implement check if user is allowed to read this chat here !!!
-    pseudo-code
-    dct = dict()
-    for message in chat_id:
-        dct[message_id] = message_text
-    return JsonResponse(dct)
+
+    returns JSON that contain all messages in this chat {message_id : user_id, text}
     '''
+    message_to_user_and_text = dict()
+    for message in InstantMessage.objects.filter(chat=chat_id):
+        message_to_user_and_text[message.id] = [message.user.id, message.text]
+    return JsonResponse(message_to_user_and_text)
 
     
 class UserRegisterView(APIView):
