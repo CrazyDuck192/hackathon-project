@@ -28,6 +28,9 @@ class CustomUserManager(BaseUserManager):
     
 
 class User(AbstractUser):
+    '''
+    one-to-many relationship between User and InstantMessage
+    '''
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, 
                         editable=False)
     email = models.EmailField(blank=True, null=True)
@@ -68,11 +71,12 @@ class Chat(models.Model):
 
 class InstantMessage(models.Model):
     text = models.TextField()
-    chat_id = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class UserToChat(models.Model):
     '''
     join table to implement many-to-many relationship between User and Chat
     '''
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    chat_id = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
